@@ -90,3 +90,44 @@ class SilverRing(Item):
 class SingingSword(Weapon):
     def __init__(self):
         super().__init__("Singing Sword", 5, "A sword that sings when swung.", gold_value=40)
+
+# --- Potions and Consumables ---
+class HealingPotion(Item):
+    def __init__(self):
+        super().__init__("Healing Potion", "Restores 20 HP when used.", item_type="potion", gold_value=15)
+
+class GreaterHealingPotion(Item):
+    def __init__(self):
+        super().__init__("Greater Healing Potion", "Restores 50 HP when used.", item_type="potion", gold_value=35)
+
+class ManaPotion(Item):
+    def __init__(self):
+        super().__init__("Mana Potion", "Restores 20 MP when used.", item_type="potion", gold_value=18)
+
+class GreaterManaPotion(Item):
+    def __init__(self):
+        super().__init__("Greater Mana Potion", "Restores 50 MP when used.", item_type="potion", gold_value=40)
+
+class StrengthPotion(Item):
+    def __init__(self):
+        super().__init__("Strength Potion", "Temporarily boosts attack power by 3 for one fight.", item_type="potion", gold_value=25)
+
+class DefensePotion(Item):
+    def __init__(self):
+        super().__init__("Defense Potion", "Temporarily boosts defense by 3 for one fight.", item_type="potion", gold_value=25)
+
+class SpeedPotion(Item):
+    def __init__(self):
+        super().__init__("Speed Potion", "Increases dodge chance by 20% for one fight.", item_type="potion", gold_value=20)
+
+class RegenerationPotion(Item):
+    def __init__(self):
+        super().__init__("Regeneration Potion", "Restores 5 HP at the start of each turn for 3 turns.", item_type="potion", gold_value=30)
+
+class AntidotePotion(Item):
+    def __init__(self):
+        super().__init__("Antidote Potion", "Cures poison effects.", item_type="potion", gold_value=12)
+
+class ElixirOfLife(Item):
+    def __init__(self):
+        super().__init__("Elixir of Life", "Fully restores HP and cures all status effects.", item_type="potion", gold_value=100)

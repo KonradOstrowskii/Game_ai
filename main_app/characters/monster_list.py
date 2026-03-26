@@ -13,6 +13,17 @@ MONSTER_LIST = {
     "dragon": Monster("Dragon", 10, 25, 120, experience_reward=200, treasure_reward=20),
     "lich": Monster("Lich", 8, 18, 80, experience_reward=120, treasure_reward=12),
     "ogre_chief": Monster("Ogre Chief", 6, 20, 60, experience_reward=90, treasure_reward=8),
+    # New monsters:
+    "werewolf": Monster("Werewolf", 4, 15, 45, experience_reward=75, treasure_reward=6),
+    "vampire": Monster("Vampire", 7, 20, 70, experience_reward=150, treasure_reward=15),
+    "giant": Monster("Giant", 9, 22, 100, experience_reward=180, treasure_reward=18),
+    "minotaur": Monster("Minotaur", 5, 18, 55, experience_reward=85, treasure_reward=7),
+    "beholder": Monster("Beholder", 6, 16, 65, experience_reward=110, treasure_reward=10),
+    "manticore": Monster("Manticore", 5, 14, 50, experience_reward=80, treasure_reward=6),
+    "basilisk": Monster("Basilisk", 4, 12, 40, experience_reward=65, treasure_reward=5),
+    "harpy": Monster("Harpy", 2, 9, 18, experience_reward=30, treasure_reward=2),
+    "golem": Monster("Golem", 8, 25, 90, experience_reward=140, treasure_reward=12),
+    "wraith": Monster("Wraith", 3, 10, 30, experience_reward=45, treasure_reward=4),
 }
 
 # Attach loot tables to each monster (by .loot_table attribute)
@@ -61,6 +72,66 @@ MONSTER_LIST["ogre_chief"].loot_table = [
     (items.IronHelmet, 25, 1, 1),
     (items.WoodenShield, 40, 1, 1),
     (items.HealthPotion, 50, 1, 2),
+]
+MONSTER_LIST["werewolf"].loot_table = [
+    (items.LeatherArmor, 20, 1, 1),
+    (items.HealthPotion, 30, 1, 1),
+    (items.AmuletOfLuck, 10, 1, 1),
+    (items.SilverRing, 15, 1, 1),
+]
+MONSTER_LIST["vampire"].loot_table = [
+    (items.MithrilChainmail, 15, 1, 1),
+    (items.HealthPotion, 40, 1, 2),
+    (items.ManaPotion, 30, 1, 1),
+    (items.AmuletOfLuck, 20, 1, 1),
+    (items.ScrollOfFireball, 25, 1, 1),
+]
+MONSTER_LIST["giant"].loot_table = [
+    (items.BigStick, 35, 1, 1),
+    (items.IronHelmet, 30, 1, 1),
+    (items.HealthPotion, 45, 1, 2),
+    (items.FireBomb, 20, 1, 1),
+]
+MONSTER_LIST["minotaur"].loot_table = [
+    (items.BigStick, 40, 1, 1),
+    (items.LeatherArmor, 25, 1, 1),
+    (items.HealthPotion, 35, 1, 1),
+    (items.WoodenShield, 30, 1, 1),
+]
+MONSTER_LIST["beholder"].loot_table = [
+    (items.ScrollOfFireball, 50, 1, 2),
+    (items.ManaPotion, 40, 1, 2),
+    (items.AmuletOfLuck, 25, 1, 1),
+    (items.SilverRing, 35, 1, 1),
+]
+MONSTER_LIST["manticore"].loot_table = [
+    (items.LeatherArmor, 20, 1, 1),
+    (items.HealthPotion, 25, 1, 1),
+    (items.FireBomb, 15, 1, 1),
+    (items.BasicPotion, 30, 1, 1),
+]
+MONSTER_LIST["basilisk"].loot_table = [
+    (items.HealthPotion, 35, 1, 1),
+    (items.ManaPotion, 20, 1, 1),
+    (items.AmuletOfLuck, 15, 1, 1),
+    (items.SilverRing, 25, 1, 1),
+]
+MONSTER_LIST["harpy"].loot_table = [
+    (items.BasicPotion, 40, 1, 1),
+    (items.HealthPotion, 20, 1, 1),
+    (items.SilverRing, 10, 1, 1),
+]
+MONSTER_LIST["golem"].loot_table = [
+    (items.MithrilChainmail, 25, 1, 1),
+    (items.IronHelmet, 35, 1, 1),
+    (items.WoodenShield, 45, 1, 1),
+    (items.HealthPotion, 40, 1, 1),
+]
+MONSTER_LIST["wraith"].loot_table = [
+    (items.ManaPotion, 35, 1, 1),
+    (items.ScrollOfFireball, 20, 1, 1),
+    (items.AmuletOfLuck, 15, 1, 1),
+    (items.SilverRing, 30, 1, 1),
 ]
 
 # Helper for loot rolling

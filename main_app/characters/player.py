@@ -1,7 +1,7 @@
 from characters.base_character import BaseCharacter
 # --- IMPORT CHANGE ---
 from items_and_equipment.equipment import Equipment
-from characters.race import Human, Elf, Dwarf, Orc # We import all races
+from characters.race import Human, Elf, Dwarf, Orc, Halfling, Gnome, HalfElf, HalfOrc # We import all races
 
 class Player(BaseCharacter):
     """
@@ -18,7 +18,11 @@ class Player(BaseCharacter):
         self.attribute_strength = 0 # Example attributes
         self.attribute_dexterity = 0
         self.attribute_intelligence = 0
+        self.attribute_charisma = 0
+        self.attribute_wisdom = 0
+        self.attribute_constitution = 0
         self.inventory = [] # Player's inventory
+        self.max_inventory_slots = 20  # Maximum number of items player can carry
         # Add some starter items for testing/demo
         from items_and_equipment.items import NarrowSword, LeatherArmor, BasicPotion, HealthPotion
         self.inventory.append(NarrowSword())
@@ -77,4 +81,7 @@ class Player(BaseCharacter):
                 f"Strength: {self.attribute_strength}\n"
                 f"Dexterity: {self.attribute_dexterity}\n"
                 f"Intelligence: {self.attribute_intelligence}\n"
-                f"Inventory: {inventory_str}")
+                f"Charisma: {self.attribute_charisma}\n"
+                f"Wisdom: {self.attribute_wisdom}\n"
+                f"Constitution: {self.attribute_constitution}\n"
+                f"Inventory: {inventory_str} ({len(self.inventory)}/{self.max_inventory_slots})")

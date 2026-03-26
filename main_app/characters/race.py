@@ -42,6 +42,7 @@ class Human(Race):
         player.attribute_strength += 1
         player.attribute_dexterity += 1
         player.attribute_intelligence += 1
+        player.attribute_charisma += 1
 
     @staticmethod
     def adrenaline_rush():
@@ -63,6 +64,7 @@ class Elf(Race):
         player.hit_points += 1
         player.attribute_dexterity += 3 # Large bonus to Dexterity
         player.attribute_intelligence += 1
+        player.attribute_wisdom += 1
 
     @staticmethod
     def dodges():
@@ -84,6 +86,8 @@ class Dwarf(Race):
         player.hit_points += 5
         player.attribute_strength += 2 # Strength bonus
         player.attribute_intelligence -= 1 # Small Intelligence penalty
+        player.attribute_constitution += 2
+        player.attribute_wisdom += 1
 
     @staticmethod
     def block():
@@ -106,7 +110,102 @@ class Orc(Race):
         player.hit_points += 3
         player.attribute_strength += 3 # Large Strength bonus
         player.attribute_dexterity -= 1 # Small Dexterity penalty
+        player.attribute_constitution += 1
+        player.attribute_charisma -= 1
+        player.attribute_wisdom -= 1
 
-    def berserk(self):
+    @staticmethod
+    def berserk():
         """Check if the Orc's Battle Fury triggers (20% chance, 1 in 5)."""
         return random.randint(1, 5) == 5
+
+# --- HALFLING: Luck and Stealth (Lucky Dodge) ---
+class Halfling(Race):
+    def __init__(self):
+        description = ("Halflings are small, cheerful folk known for their incredible luck and stealth. "
+                       "You have a **25% chance for Lucky Dodge**, allowing you to avoid attacks with uncanny fortune. "
+                       "You gain bonuses to Dexterity and Charisma, but penalties to Strength and Constitution.")
+        super().__init__("Halfling", description)
+        self.add_skill("Lucky Dodge", self.lucky_dodge)
+
+    def apply_bonuses(self, player):
+        player.attack_power += 1
+        player._hit_points_max += 1
+        player.hit_points += 1
+        player.attribute_dexterity += 2
+        player.attribute_charisma += 2
+        player.attribute_strength -= 1
+        player.attribute_constitution -= 1
+
+    @staticmethod
+    def lucky_dodge():
+        """Checks if the Halfling's Lucky Dodge triggers (25% chance, 1 in 4)."""
+        return random.randint(1, 4) == 4
+
+# --- GNOME: Intelligence and Invention (Counterspell) ---
+class Gnome(Race):
+    def __init__(self):
+        description = ("Gnomes are ingenious inventors and scholars, masters of magic and technology. "
+                       "You have a **15% chance to Counterspell** magical attacks, reflecting them back. "
+                       "You gain large bonuses to Intelligence and Wisdom, but penalties to Strength and Constitution.")
+        super().__init__("Gnome", description)
+        self.add_skill("Counterspell", self.counterspell)
+
+    def apply_bonuses(self, player):
+        player.attack_power += 1
+        player._hit_points_max += 1
+        player.hit_points += 1
+        player.attribute_intelligence += 3
+        player.attribute_wisdom += 2
+        player.attribute_strength -= 1
+        player.attribute_constitution -= 1
+
+    @staticmethod
+    def counterspell():
+        """Checks if the Gnome's Counterspell triggers (15% chance, 3 in 20)."""
+        return random.randint(1, 20) <= 3
+
+# --- HALF-ELF: Adaptability and Perception (Second Wind) ---
+class HalfElf(Race):
+    def __init__(self):
+        description = ("Half-elves combine the best of elven grace and human determination. "
+                       "You have a **20% chance for Second Wind**, regaining some HP after taking damage. "
+                       "You gain balanced bonuses to Dexterity, Intelligence, and Charisma.")
+        super().__init__("Half-Elf", description)
+        self.add_skill("Second Wind", self.second_wind)
+
+    def apply_bonuses(self, player):
+        player.attack_power += 2
+        player._hit_points_max += 2
+        player.hit_points += 2
+        player.attribute_dexterity += 1
+        player.attribute_intelligence += 1
+        player.attribute_charisma += 2
+
+    @staticmethod
+    def second_wind():
+        """Checks if the Half-Elf's Second Wind triggers (20% chance, 1 in 5)."""
+        return random.randint(1, 5) == 5
+
+# --- HALF-ORC: Ferocity and Toughness (Rage) ---
+class HalfOrc(Race):
+    def __init__(self):
+        description = ("Half-orcs are fierce warriors with orcish strength and human cunning. "
+                       "You have a **25% chance to Rage**, gaining extra attack power for one turn. "
+                       "You gain bonuses to Strength and Constitution, but penalties to Intelligence and Charisma.")
+        super().__init__("Half-Orc", description)
+        self.add_skill("Rage", self.rage)
+
+    def apply_bonuses(self, player):
+        player.attack_power += 2
+        player._hit_points_max += 4
+        player.hit_points += 4
+        player.attribute_strength += 2
+        player.attribute_constitution += 2
+        player.attribute_intelligence -= 1
+        player.attribute_charisma -= 1
+
+    @staticmethod
+    def rage():
+        """Checks if the Half-Orc's Rage triggers (25% chance, 1 in 4)."""
+        return random.randint(1, 4) == 4

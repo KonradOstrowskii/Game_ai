@@ -44,6 +44,7 @@ class PostFightSummaryScreen:
             xp_gained = self.game.last_fight_rewards.get("xp", 0)
             gold_gained = self.game.last_fight_rewards.get("gold", 0)
             items_gained = self.game.last_fight_rewards.get("items", [])
+            rejected_items = self.game.last_fight_rewards.get("rejected_items", [])
 
             self.game.draw_text("Victory!", 'title', GOLD, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 200)
 
@@ -54,6 +55,8 @@ class PostFightSummaryScreen:
             )
             if items_gained:
                 summary_text += "\nLoot: " + ", ".join(items_gained)
+            if rejected_items:
+                summary_text += "\n\nInventory full! Lost: " + ", ".join(rejected_items)
 
             self.game.draw_text(summary_text, 'large', WHITE, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50)
 

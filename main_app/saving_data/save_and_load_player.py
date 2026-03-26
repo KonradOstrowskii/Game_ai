@@ -52,6 +52,9 @@ def save_player_to_json(player):
         "attribute_strength": player.attribute_strength,
         "attribute_dexterity": player.attribute_dexterity,
         "attribute_intelligence": player.attribute_intelligence,
+        "attribute_charisma": player.attribute_charisma,
+        "attribute_wisdom": player.attribute_wisdom,
+        "attribute_constitution": player.attribute_constitution,
         "race": player.race.name,
         "race_skills": player.race.get_skills_dict() if hasattr(player.race, 'get_skills_dict') else [],
         "equipment": {
@@ -59,7 +62,8 @@ def save_player_to_json(player):
             "armor": player.equipment.armor.name if player.equipment.armor else None,
             "helmet": player.equipment.helmet.name if player.equipment.helmet else None,
             "shield": player.equipment.shield.name if player.equipment.shield else None,
-            "accessory": player.equipment.accessory.name if hasattr(player.equipment, 'accessory') and player.equipment.accessory else None
+            "accessory": player.equipment.accessory.name if hasattr(player.equipment, 'accessory') and player.equipment.accessory else None,
+            "quick_slots": [slot.name if slot else None for slot in player.equipment.quick_slots]
         },
         "inventory": [item.name for item in player.inventory] # Save names of items in inventory
     }
@@ -92,6 +96,9 @@ def load_player_from_json(filename):
     player.attribute_strength = player_data["attribute_strength"]
     player.attribute_dexterity = player_data["attribute_dexterity"]
     player.attribute_intelligence = player_data["attribute_intelligence"]
+    player.attribute_charisma = player_data.get("attribute_charisma", 0)
+    player.attribute_wisdom = player_data.get("attribute_wisdom", 0)
+    player.attribute_constitution = player_data.get("attribute_constitution", 0)
     
     # We recreate the base stats (HP and Attack Power)
     player._hit_points_max = player_data["hit_points_max"]
@@ -112,6 +119,18 @@ def load_player_from_json(filename):
     elif race_name == "Orc":
         from characters.race import Orc
         player.race = Orc()
+    elif race_name == "Halfling":
+        from characters.race import Halfling
+        player.race = Halfling()
+    elif race_name == "Gnome":
+        from characters.race import Gnome
+        player.race = Gnome()
+    elif race_name == "Half-Elf":
+        from characters.race import HalfElf
+        player.race = HalfElf()
+    elif race_name == "Half-Orc":
+        from characters.race import HalfOrc
+        player.race = HalfOrc()
     # Skills are tied to race, so restoring race restores skills.
 
     # We recreate the equipment using AVAILABLE_ITEMS
@@ -124,6 +143,12 @@ def load_player_from_json(filename):
                 player.equipment.equip(AVAILABLE_ITEMS[item_name]())
             else:
                 missing_equipment.append(f"  - {slot}: {item_name} (not found in AVAILABLE_ITEMS)")
+    
+    # Load quick slots
+    if "quick_slots" in eq:
+        for i, item_name in enumerate(eq["quick_slots"]):
+            if item_name and item_name in AVAILABLE_ITEMS:
+                player.equipment.quick_slots[i] = AVAILABLE_ITEMS[item_name]()
     
     if missing_equipment:
         print(f"[SAVE/LOAD WARNING] Failed to restore some equipment for '{player.name}':")

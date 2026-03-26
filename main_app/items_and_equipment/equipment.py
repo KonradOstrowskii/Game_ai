@@ -11,6 +11,7 @@ class Equipment:
         self.helmet = None
         self.shield = None
         self.accessory = None
+        self.quick_slots = [None, None, None, None]  # Quick access slots for potions/consumables
         self.other_items = [] # For potions, scrolls, etc.
 
     def equip(self, item):
@@ -66,10 +67,22 @@ class Equipment:
             print(f"Equipped {item.name} as accessory.")
             return previous
         else:
-            # For items like potions, scrolls, etc.
-            self.other_items.append(item)
-            print(f"Added {item.name} to inventory.")
-            return None
+            # For potions/consumables, try to put in quick slots first
+            if item.item_type == "potion":
+                for i, slot in enumerate(self.quick_slots):
+                    if slot is None:
+                        self.quick_slots[i] = item
+                        print(f"Equipped {item.name} in quick slot {i+1}.")
+                        return None
+                # If no quick slots available, add to other items
+                self.other_items.append(item)
+                print(f"Added {item.name} to inventory (no quick slots available).")
+                return None
+            else:
+                # For other items like scrolls, etc.
+                self.other_items.append(item)
+                print(f"Added {item.name} to inventory.")
+                return None
 
     def unequip(self, item_type):
         """
@@ -112,7 +125,9 @@ class Equipment:
         helmet_str = self.helmet.name if self.helmet else "None"
         shield_str = self.shield.name if self.shield else "None"
         accessory_str = self.accessory.name if self.accessory else "None"
+        quick_slots_str = ", ".join(slot.name if slot else "-" for slot in self.quick_slots)
         return (
             f"Weapon: {weapon_str}, Armor: {armor_str}, Helmet: {helmet_str}, "
-            f"Shield: {shield_str}, Accessory: {accessory_str}"
+            f"Shield: {shield_str}, Accessory: {accessory_str}\n"
+            f"Quick Slots: [{quick_slots_str}]"
         )

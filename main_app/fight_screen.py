@@ -20,6 +20,8 @@ class FightScreen:
 
         self.attack_button = Button(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 150, 200, 60, "Attack",
                                    action=self.player_attack)
+        self.use_item_button = Button(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 220, 200, 60, "Use Item",
+                                     action=self.use_item)
         self.run_button = Button(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 70, 200, 60, "Run Away",
                                 action=self.run_away)
         self.back_to_world_button = Button(50, 50, 200, 60, "Back to World",
@@ -54,17 +56,29 @@ class FightScreen:
                 self.fight_log.append(f"{self.monster.name} is defeated!")
                 from characters.monster_list import roll_loot
                 looted_items = roll_loot(self.monster)
+                
+                # Check inventory space before adding loot
+                added_items = []
+                rejected_items = []
                 for item in looted_items:
-                    self.player.inventory.append(item)
+                    if len(self.player.inventory) < self.player.max_inventory_slots:
+                        self.player.inventory.append(item)
+                        added_items.append(item.name)
+                    else:
+                        rejected_items.append(item.name)
+                
                 self.game.last_fight_rewards = {
                     "monster_name": self.monster.name,
                     "xp": self.monster.experience_reward,
                     "gold": self.monster.treasure_reward,
-                    "items": [item.name for item in looted_items]
+                    "items": added_items,
+                    "rejected_items": rejected_items
                 }
                 self.fight_log.append(f"You gained {self.monster.experience_reward} XP!")
-                if looted_items:
-                    self.fight_log.append(f"Looted: {', '.join(item.name for item in looted_items)}")
+                if added_items:
+                    self.fight_log.append(f"Looted: {', '.join(added_items)}")
+                if rejected_items:
+                    self.fight_log.append(f"Inventory full! Couldn't carry: {', '.join(rejected_items)}")
                 self.player.gain_experience(self.monster.experience_reward)
                 self.player.gold += self.monster.treasure_reward
                 self.game.save_player_to_json(self.player)
@@ -73,6 +87,66 @@ class FightScreen:
                 self.monster_attack()
         else:
             self.game.message = "Error: No player or monster in fight."
+
+    def use_item(self):
+        """Handles player's item usage action."""
+        if self.player:
+            # Check quick slots first for potions
+            for i, item in enumerate(self.player.equipment.quick_slots):
+                if item and item.item_type == "potion":
+                    self.use_potion(item, quick_slot_index=i)
+                    return
+            
+            # If no potions in quick slots, check regular inventory
+            for item in self.player.inventory:
+                if item.item_type == "potion":
+                    self.use_potion(item)
+                    return
+            
+            self.fight_log.append("No potions available!")
+        else:
+            self.fight_log.append("No items to use!")
+
+    def use_potion(self, potion, quick_slot_index=None):
+        """Uses a potion and applies its effects."""
+        if potion.name == "Healing Potion":
+            heal_amount = min(20, self.player._hit_points_max - self.player.hit_points)
+            self.player.hit_points += heal_amount
+            self.fight_log.append(f"Used {potion.name}, healed {heal_amount} HP!")
+        elif potion.name == "Greater Healing Potion":
+            heal_amount = min(50, self.player._hit_points_max - self.player.hit_points)
+            self.player.hit_points += heal_amount
+            self.fight_log.append(f"Used {potion.name}, healed {heal_amount} HP!")
+        elif potion.name == "Mana Potion":
+            # For now, just log it (no mana system yet)
+            self.fight_log.append(f"Used {potion.name}, restored 20 MP!")
+        elif potion.name == "Greater Mana Potion":
+            self.fight_log.append(f"Used {potion.name}, restored 50 MP!")
+        elif potion.name == "Strength Potion":
+            self.player.attack_power += 3
+            self.fight_log.append(f"Used {potion.name}, attack increased by 3!")
+        elif potion.name == "Defense Potion":
+            # Could add temporary defense bonus
+            self.fight_log.append(f"Used {potion.name}, defense increased by 3!")
+        elif potion.name == "Speed Potion":
+            self.fight_log.append(f"Used {potion.name}, dodge chance increased!")
+        elif potion.name == "Regeneration Potion":
+            self.fight_log.append(f"Used {potion.name}, regeneration active for 3 turns!")
+        elif potion.name == "Antidote Potion":
+            self.fight_log.append(f"Used {potion.name}, poison cured!")
+        elif potion.name == "Elixir of Life":
+            self.player.hit_points = self.player._hit_points_max
+            self.fight_log.append(f"Used {potion.name}, fully healed!")
+        
+        # Remove the used potion
+        if quick_slot_index is not None:
+            self.player.equipment.quick_slots[quick_slot_index] = None
+        else:
+            self.player.inventory.remove(potion)
+        
+        # Monster gets a turn after using item
+        if self.monster and self.monster.alive:
+            self.monster_attack()
 
     def monster_attack(self):
         """Handles monster's attack action."""
@@ -104,6 +178,7 @@ class FightScreen:
         """Handles user input events for this screen."""
         for event in events:
             self.attack_button.handle_event(event)
+            self.use_item_button.handle_event(event)
             self.run_button.handle_event(event)
             self.back_to_world_button.handle_event(event)
 
@@ -152,6 +227,7 @@ class FightScreen:
             font_medium = self.asset_manager.get_font('medium')
             if self.player.alive and self.monster.alive:
                 self.attack_button.draw(screen, font_medium)
+                self.use_item_button.draw(screen, font_medium)
                 self.run_button.draw(screen, font_medium)
             else:
                 self.back_to_world_button.draw(screen, font_medium)
