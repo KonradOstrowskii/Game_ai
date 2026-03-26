@@ -110,7 +110,6 @@ class Game:
         """Updates game logic for the current screen."""
         if self.state == 'load_game':
             self.current_screen.refresh_save_list()
-        self.current_screen.update()
 
     def draw(self):
         """Draws the current screen and any global elements."""
