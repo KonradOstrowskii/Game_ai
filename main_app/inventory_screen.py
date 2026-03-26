@@ -1,39 +1,33 @@
 import pygame
-import os
-from constants import WHITE, BLACK, FONT_NAME
 
 class InventoryScreen:
     def __init__(self, game, player):
         self.game = game
         self.player = player
+        self.asset_manager = game.asset_manager  # Get asset_manager from game
         self.selected_index = 0
-        self.font = pygame.font.SysFont(FONT_NAME, 24)
-        self.info_font = pygame.font.SysFont(FONT_NAME, 18)
-        self.tooltip_font = pygame.font.SysFont(FONT_NAME, 16)
+        self.font = self.asset_manager.get_font('small')
+        self.info_font = self.asset_manager.get_font('small')
+        self.tooltip_font = self.asset_manager.get_font('small')
         self.bg_color = (30, 30, 30)
         self.slot_color = (60, 60, 60)
         self.selected_color = (120, 120, 180)
-        self.text_color = WHITE
+        self.text_color = (255, 255, 255)
         self.margin = 40
         self.slot_height = 40
         self.info_box_width = 350
-        self.item_icon_size = 32  # New size for item icons
-        self.item_icons = self.load_item_icons()
+        self.item_icon_size = 32
         self.dragged_item = None
         self.dragged_item_pos = (0, 0)
 
-    def load_item_icons(self):
-        """Load item icons dynamically based on item type."""
-        icons = {}
-        icon_path = os.path.join("assets", "item_icons")
-        default_icon = pygame.Surface((32, 32))  # Placeholder icon
-        default_icon.fill((200, 200, 200))
-        for item_type in ["weapon", "armor", "helmet", "shield", "accessory"]:
-            try:
-                icons[item_type] = pygame.image.load(os.path.join(icon_path, f"{item_type}.png"))
-            except FileNotFoundError:
-                icons[item_type] = default_icon
-        return icons
+    def get_item_icon(self, item_type):
+        """Get the appropriate icon for an item type."""
+        icon_key = f"{item_type}_icon"
+        icon = self.asset_manager.get_image(icon_key)
+        if icon:
+            return icon
+        # Fallback to general icon
+        return self.asset_manager.get_image('potion_icon')  # Default fallback
 
     def draw_tooltip(self, surface, item, position):
         """Draw a tooltip with item details."""
@@ -167,8 +161,8 @@ class InventoryScreen:
             pygame.draw.rect(surface, color, rect)
 
             # Draw item icon
-            if item.item_type in self.item_icons:
-                icon = self.item_icons[item.item_type]
+            icon = self.get_item_icon(item.item_type)
+            if icon:
                 surface.blit(icon, (self.margin + 10, y + 4))
 
             # Draw item name
@@ -237,8 +231,8 @@ class InventoryScreen:
 
         # Draw dragged item
         if self.dragged_item:
-            if self.dragged_item.item_type in self.item_icons:
-                icon = self.item_icons[self.dragged_item.item_type]
+            icon = self.get_item_icon(self.dragged_item.item_type)
+            if icon:
                 surface.blit(icon, self.dragged_item_pos)
             else:
                 pygame.draw.rect(surface, (200, 200, 200), (*self.dragged_item_pos, 32, 32))

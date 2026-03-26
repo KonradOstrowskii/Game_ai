@@ -25,33 +25,33 @@ class MainMenuScreen:
 
         self.buttons.append(Button(
             (SCREEN_WIDTH / 2) - (button_width / 2), start_y, button_width, button_height,
-            "New Game", action=lambda: self.game.change_state('character_creation')
+            "New Game", action=lambda: self.game.change_state('character_creation'),
+            asset_manager=self.asset_manager
         ))
         
         self.buttons.append(Button(
             (SCREEN_WIDTH / 2) - (button_width / 2), start_y + spacing, button_width, button_height,
-            "Load Game", action=lambda: self.game.change_state('load_game')
+            "Load Game", action=lambda: self.game.change_state('load_game'),
+            asset_manager=self.asset_manager
         ))
-
+        
         self.buttons.append(Button(
             (SCREEN_WIDTH / 2) - (button_width / 2), start_y + 2 * spacing, button_width, button_height,
-            "Quit", action=self.game.quit_game
+            "Quit", action=self.game.quit_game,
+            asset_manager=self.asset_manager
         ))
 
     def handle_events(self, events):
-        """
-        Handles all user input events for the main menu screen.
-        """
+        """Handles user input events for the main menu."""
         for event in events:
             for button in self.buttons:
                 button.handle_event(event)
 
     def draw(self, screen):
-        """
-        Draws the main menu screen, including background, title, and buttons.
-        """
+        """Draws the main menu screen."""
         screen.blit(self.background, (0, 0))
         self.game.draw_text("Munchkin RPG", 'title', WHITE, SCREEN_WIDTH / 2, 150)
+        
         font_large = self.asset_manager.get_font('large')
         for button in self.buttons:
             button.draw(screen, font_large)

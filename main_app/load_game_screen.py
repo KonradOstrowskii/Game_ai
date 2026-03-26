@@ -19,9 +19,9 @@ class LoadGameScreen:
         self.refresh_save_list()
 
         self.back_button = Button(50, 50, 150, 50, "Back",
-                                  action=lambda: self.game.change_state('main_menu'))
+                                  action=lambda: self.game.change_state('main_menu'), asset_manager=asset_manager)
         self.load_button = Button(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT - 100, 300, 70, "Load Game",
-                                 action=self._load_selected_game)
+                                 action=self._load_selected_game, asset_manager=asset_manager)
 
     def refresh_save_list(self):
         """Refreshes the list of available save files and creates corresponding buttons."""

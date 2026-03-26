@@ -16,11 +16,11 @@ class PostFightSummaryScreen:
 
         self.next_battle_button = Button(
             (SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT / 2 + 50, 300, 70, 
-            "Next Battle", action=self.next_battle
+            "Next Battle", action=self.next_battle, asset_manager=asset_manager
         )
         self.back_to_world_button = Button(
             (SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT / 2 + 150, 300, 70, 
-            "Back to World", action=lambda: self.game.change_state('game_world')
+            "Back to World", action=lambda: self.game.change_state('game_world'), asset_manager=asset_manager
         )
 
     def next_battle(self):

@@ -35,15 +35,15 @@ class CharacterCreationScreen:
         for key, config in RACE_CONFIG.items():
             race_name = config['class']().name
             button = Button(100, button_y_start, 250, 60, race_name,
-                            action=self.create_race_selection_action(key))
+                            action=self.create_race_selection_action(key), asset_manager=self.asset_manager)
             self.race_buttons[key] = button
             button_y_start += 80
         
         self.selected_race_key = None
         self.create_button = Button((SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT - 100, 300, 70, "Create Character",
-                                    action=self.create_character)
+                                    action=self.create_character, asset_manager=self.asset_manager)
         
-        self.back_button = Button(50, 50, 150, 50, "Back", action=lambda: self.game.change_state('main_menu'))
+        self.back_button = Button(50, 50, 150, 50, "Back", action=lambda: self.game.change_state('main_menu'), asset_manager=self.asset_manager)
 
     def create_race_selection_action(self, key):
         """Creates a dynamic action for race selection buttons."""

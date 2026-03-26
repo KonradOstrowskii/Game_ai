@@ -47,10 +47,6 @@ main_app/
   - `characters/base_character.py` - Combat mechanics with cleaner skill logic
   - `saving_data/save_and_load_player.py` - Persistence with detailed logging
 
-## Quick Start
-
-**See [GETTING_STARTED.md](./GETTING_STARTED.md) for detailed setup instructions.**
-
 ### TL;DR
 ```bash
 python -m venv venv
@@ -81,12 +77,7 @@ python main_app.py
 *   Adding more monsters, items, and skills.
 *   Developing a crafting system.
 
-## Troubleshooting
-
-**Game won't start?** See [GETTING_STARTED.md - Troubleshooting](./GETTING_STARTED.md#troubleshooting)
 
 **Issues during gameplay?** Check console output for error messages (game runs in terminal).
 
-## Credits
 
-Developed by [Your Name Here]

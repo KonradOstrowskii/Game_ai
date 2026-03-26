@@ -19,13 +19,13 @@ class FightScreen:
         self.background.fill((100, 100, 100))
 
         self.attack_button = Button(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 150, 200, 60, "Attack",
-                                   action=self.player_attack)
+                                   action=self.player_attack, asset_manager=asset_manager)
         self.use_item_button = Button(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 220, 200, 60, "Use Item",
-                                     action=self.use_item)
+                                     action=self.use_item, asset_manager=asset_manager)
         self.run_button = Button(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 70, 200, 60, "Run Away",
-                                action=self.run_away)
+                                action=self.run_away, asset_manager=asset_manager)
         self.back_to_world_button = Button(50, 50, 200, 60, "Back to World",
-                                          action=lambda: self.game.change_state('game_world'))
+                                          action=lambda: self.game.change_state('game_world'), asset_manager=asset_manager)
         self.fight_log = []
         self.log_scroll = 0  # For scrolling through fight log
 
@@ -188,6 +188,16 @@ class FightScreen:
         self.game.draw_text("Combat!", 'title', WHITE, SCREEN_WIDTH / 2, 50)
 
         if self.player and self.monster:
+            # Draw player card
+            player_card = self.asset_manager.get_image('player_card')
+            if player_card:
+                screen.blit(player_card, (50, 120))
+            
+            # Draw monster card
+            monster_card = self.asset_manager.get_image('monster_card')
+            if monster_card:
+                screen.blit(monster_card, (SCREEN_WIDTH - 350, 120))
+            
             # Draw player and monster stats at top
             self.game.draw_text(f"Player: {self.player.name} HP: {self.player.hit_points}/{self.player._hit_points_max}", 
                                 'large', WHITE, SCREEN_WIDTH / 4, 150)

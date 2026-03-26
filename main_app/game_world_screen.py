@@ -18,9 +18,9 @@ class GameWorldScreen:
         self.asset_manager = asset_manager
         self.background = self.asset_manager.get_image('game_world')
         self.fight_button = Button((SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT - 80, 300, 70, "Find Trouble!",
-                                   action=self.start_fight)
+                                   action=self.start_fight, asset_manager=asset_manager)
         self.back_to_menu_button = Button(50, 50, 200, 60, "Back to Menu",
-                                          action=lambda: self.game.change_state('main_menu'))
+                                          action=lambda: self.game.change_state('main_menu'), asset_manager=asset_manager)
 
     def start_fight(self):
         """Starts a new fight if a player is loaded."""
@@ -44,6 +44,11 @@ class GameWorldScreen:
         screen.blit(self.background, (0, 0))
 
         if self.game.player:
+            # Draw player card panel
+            player_card = self.asset_manager.get_image('player_card')
+            if player_card:
+                screen.blit(player_card, (GAME_WORLD_PLAYER_CARD_X - 150, GAME_WORLD_PLAYER_CARD_Y_START - 20))
+            
             text_x = GAME_WORLD_PLAYER_CARD_X
             text_y_start = GAME_WORLD_PLAYER_CARD_Y_START
 

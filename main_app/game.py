@@ -23,7 +23,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
         pygame.display.set_caption("Munchkin-like RPG Adventure")
         self.clock = pygame.time.Clock()
         self.is_running = True
@@ -50,13 +50,10 @@ class Game:
     def _validate_assets(self):
         """
         Validates that required assets exist before starting the game.
-        Fails fast with clear error messages instead of silent fallbacks.
+        Since we now use programmatic graphics, only the font file is required.
         """
         required_files = [
             (FONT_PATH, "Font file (MedievalSharp-Regular.ttf)"),
-            (os.path.join(ASSETS_PATH, "character_creation_background.png"), "Character Creation Background"),
-            (os.path.join(ASSETS_PATH, "game_world_background.png"), "Game World Background"),
-            (os.path.join(ASSETS_PATH, "load_game_background.png"), "Load Game Background"),
         ]
         
         missing_assets = []
