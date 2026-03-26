@@ -1,0 +1,31 @@
+{
+    "name": "fsafsafa",
+    "level": 1,
+    "attack_power": 6,
+    "hit_points_max": 22,
+    "hit_points": 17,
+    "experience": 10,
+    "gold": 1,
+    "unspent_attribute_points": 0,
+    "attribute_strength": 1,
+    "attribute_dexterity": 1,
+    "attribute_intelligence": 1,
+    "race": "Human",
+    "race_skills": [
+        "Adrenaline Rush"
+    ],
+    "equipment": {
+        "weapon": null,
+        "armor": "Leather Armor",
+        "helmet": null,
+        "shield": null,
+        "accessory": null
+    },
+    "inventory": [
+        "Narrow Sword",
+        "Leather Armor",
+        "Basic Potion",
+        "Health Potion",
+        "Basic Potion"
+    ]
+}

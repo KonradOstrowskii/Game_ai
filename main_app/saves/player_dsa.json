@@ -1,0 +1,30 @@
+{
+    "name": "dsa",
+    "level": 1,
+    "attack_power": 8,
+    "hit_points_max": 23,
+    "hit_points": 23,
+    "experience": 0,
+    "gold": 0,
+    "unspent_attribute_points": 0,
+    "attribute_strength": 3,
+    "attribute_dexterity": -1,
+    "attribute_intelligence": 0,
+    "race": "Orc",
+    "race_skills": [
+        "Berserk"
+    ],
+    "equipment": {
+        "weapon": "Big Stick",
+        "armor": "Leather Armor",
+        "helmet": null,
+        "shield": null,
+        "accessory": null
+    },
+    "inventory": [
+        "Narrow Sword",
+        "Leather Armor",
+        "Basic Potion",
+        "Health Potion"
+    ]
+}

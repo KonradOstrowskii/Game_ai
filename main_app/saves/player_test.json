@@ -1,0 +1,30 @@
+{
+    "name": "test",
+    "level": 1,
+    "attack_power": 7,
+    "hit_points_max": 21,
+    "hit_points": 21,
+    "experience": 0,
+    "gold": 0,
+    "unspent_attribute_points": 0,
+    "attribute_strength": 0,
+    "attribute_dexterity": 3,
+    "attribute_intelligence": 1,
+    "race": "Elf",
+    "race_skills": [
+        "Dodge"
+    ],
+    "equipment": {
+        "weapon": "Narrow Sword",
+        "armor": "Leather Armor",
+        "helmet": null,
+        "shield": null,
+        "accessory": null
+    },
+    "inventory": [
+        "Narrow Sword",
+        "Leather Armor",
+        "Basic Potion",
+        "Health Potion"
+    ]
+}
