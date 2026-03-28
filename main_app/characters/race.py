@@ -187,25 +187,3 @@ class HalfElf(Race):
         """Checks if the Half-Elf's Second Wind triggers (20% chance, 1 in 5)."""
         return random.randint(1, 5) == 5
 
-# --- HALF-ORC: Ferocity and Toughness (Rage) ---
-class HalfOrc(Race):
-    def __init__(self):
-        description = ("Half-orcs are fierce warriors with orcish strength and human cunning. "
-                       "You have a **25% chance to Rage**, gaining extra attack power for one turn. "
-                       "You gain bonuses to Strength and Constitution, but penalties to Intelligence and Charisma.")
-        super().__init__("Half-Orc", description)
-        self.add_skill("Rage", self.rage)
-
-    def apply_bonuses(self, player):
-        player.attack_power += 2
-        player._hit_points_max += 4
-        player.hit_points += 4
-        player.attribute_strength += 2
-        player.attribute_constitution += 2
-        player.attribute_intelligence -= 1
-        player.attribute_charisma -= 1
-
-    @staticmethod
-    def rage():
-        """Checks if the Half-Orc's Rage triggers (25% chance, 1 in 4)."""
-        return random.randint(1, 4) == 4

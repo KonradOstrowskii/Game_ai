@@ -24,7 +24,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))  # Windowed mode for screenshots
         pygame.display.set_caption("Munchkin-like RPG Adventure")
         self.clock = pygame.time.Clock()
         self.is_running = True
