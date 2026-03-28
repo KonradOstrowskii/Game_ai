@@ -131,11 +131,6 @@ class AssetManager:
         # Forest green background
         surface.fill((34, 139, 34))  # Forest green
         
-        # Draw game panels
-        self._draw_parchment_panel(surface, 50, 50, 300, 700, (255, 248, 220))   # Player card
-        self._draw_parchment_panel(surface, 400, 50, 400, 300, (255, 248, 220))  # Actions
-        self._draw_parchment_panel(surface, 850, 50, 380, 700, (255, 248, 220))  # World info
-        
         return surface
 
     def _create_load_game_bg(self):
