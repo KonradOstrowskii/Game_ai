@@ -18,31 +18,37 @@ class CharacterCreationScreen:
         self.asset_manager = asset_manager
         self.background = self.asset_manager.get_image('character_creation')
         
+        # Name input
         input_card_width = 380
-        input_card_height = 100
-        input_card_x = (SCREEN_WIDTH / 2) - (input_card_width / 2) + 10
-        input_card_y = 660
+        input_card_height = 56
+        input_card_x = SCREEN_WIDTH - input_card_width - 60
+        input_card_y = SCREEN_HEIGHT - 140
 
         self.name_input = InputBox(
-            input_card_x, input_card_y, 
+            input_card_x, input_card_y,
             input_card_width, input_card_height,
             font=self.asset_manager.get_font('medium'),
-            background_image=self.asset_manager.get_image('input_box_bg')
+            background_image=self.asset_manager.get_image('input_box_bg'),
+            draw_background=False  # Don't draw the background image, just clean border
         )
-        
+        self.input_card_y = input_card_y
+
+        # Race selection buttons in left panel
         self.race_buttons = {}
-        button_y_start = 380
+        button_y_start = 200
+        button_height = 60
+        button_width = 300
         for key, config in RACE_CONFIG.items():
             race_name = config['class']().name
-            button = Button(100, button_y_start, 250, 60, race_name,
+            button = Button(80, button_y_start, button_width, button_height, race_name,
                             action=self.create_race_selection_action(key), asset_manager=self.asset_manager)
             self.race_buttons[key] = button
-            button_y_start += 80
-        
+            button_y_start += button_height + 16
+
         self.selected_race_key = None
-        self.create_button = Button((SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT - 100, 300, 70, "Create Character",
+        self.create_button = Button(SCREEN_WIDTH - 380 - 60, SCREEN_HEIGHT - 80, 380, 60, "Create Character",
                                     action=self.create_character, asset_manager=self.asset_manager)
-        
+
         self.back_button = Button(50, 50, 150, 50, "Back", action=lambda: self.game.change_state('main_menu'), asset_manager=self.asset_manager)
 
     def create_race_selection_action(self, key):
@@ -106,30 +112,54 @@ class CharacterCreationScreen:
     def draw(self, screen):
         """Draws the character creation screen elements."""
         screen.blit(self.background, (0, 0))
-        self.game.draw_text("Create Your Hero", 'title', WHITE, SCREEN_WIDTH / 2, 100)
-        self.game.draw_text("Enter Your Name:", 'large', BLACK, SCREEN_WIDTH / 2, 620)
-        self.name_input.draw(screen)
-        
-        self.game.draw_text("Choose Your Race:", 'large', BLACK, 225, 340)
-        
+
+        # Header
+        self.game.draw_text("Create Your Hero", 'title', WHITE, SCREEN_WIDTH / 2, 50)
+
+        # Large panels spanning most of screen
+        left_panel = pygame.Rect(40, 110, 500, 640)
+        right_panel = pygame.Rect(740, 110, 500, 640)
+        pygame.draw.rect(screen, (255, 248, 220), left_panel)
+        pygame.draw.rect(screen, (139, 69, 19), left_panel, 4)
+        pygame.draw.rect(screen, (255, 248, 220), right_panel)
+        pygame.draw.rect(screen, (139, 69, 19), right_panel, 4)
+
+        # Left panel: Race selection
+        self.game.draw_text("Choose Your Race:", 'large', BLACK, left_panel.centerx, left_panel.top + 20)
+
         font_medium = self.asset_manager.get_font('medium')
-        for button in self.race_buttons.values(): 
+        for button in self.race_buttons.values():
             button.draw(screen, font_medium)
-        
+
+        # Right panel: Race description
+        self.game.draw_text("Race Description", 'large', BLACK, right_panel.centerx, right_panel.top + 20)
+
         if self.selected_race_key:
             config = RACE_CONFIG[self.selected_race_key]
             race_instance = config['class']()
-            papyrus_center_x = SCREEN_WIDTH // 2
-            description_y_start = 320
-            
-            self.game.draw_text(f"--- {race_instance.name} ---", 'large', BLACK, papyrus_center_x, description_y_start)
+
+            desc_title = f"--- {race_instance.name} ---"
+            self.game.draw_text(desc_title, 'medium', BLACK, right_panel.centerx, right_panel.top + 70)
 
             description_text = str(race_instance).strip().replace('\n', ' ')
-            wrapped_lines = textwrap.wrap(description_text, width=50)
-            y_offset = description_y_start + 50
+            wrapped_lines = textwrap.wrap(description_text, width=40)
+            y_offset = right_panel.top + 110
+            max_desc_bottom = right_panel.bottom - 100
+            font_small = self.asset_manager.get_font('small')
             for line in wrapped_lines:
-                self.game.draw_text(line, 'small', BLACK, papyrus_center_x, y_offset)
-                y_offset += 30
+                if y_offset > max_desc_bottom:
+                    break
+                text_surface = font_small.render(line, True, BLACK)
+                text_rect = text_surface.get_rect(center=(right_panel.centerx, y_offset))
+                screen.blit(text_surface, text_rect)
+                y_offset += 22
+        else:
+            self.game.draw_text("Select a race to see details.", 'small', BLACK, right_panel.centerx, right_panel.top + 150)
 
+        # Bottom: Name input area (simplified, no background image)
+        self.game.draw_text("Enter Your Name:", 'large', BLACK, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 150)
+        self.name_input.draw(screen)
+
+        # Action buttons
         self.create_button.draw(screen, font_medium)
         self.back_button.draw(screen, font_medium)

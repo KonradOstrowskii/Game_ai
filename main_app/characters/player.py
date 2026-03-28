@@ -1,7 +1,7 @@
 from characters.base_character import BaseCharacter
 # --- IMPORT CHANGE ---
 from items_and_equipment.equipment import Equipment
-from characters.race import Human, Elf, Dwarf, Orc, Halfling, Gnome, HalfElf, HalfOrc # We import all races
+from characters.race import Human, Elf, Dwarf, Orc, Halfling, Gnome, HalfElf # We import all races
 
 class Player(BaseCharacter):
     """

@@ -12,6 +12,7 @@ from load_game_screen import LoadGameScreen
 from game_world_screen import GameWorldScreen
 from fight_screen import FightScreen
 from post_fight_summary_screen import PostFightSummaryScreen
+from inventory_screen import InventoryScreen
 from characters.player import Player
 from saving_data.save_and_load_player import save_player_to_json, load_player_from_json, get_all_save_files
 
@@ -23,7 +24,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))  # Windowed mode for screenshots
         pygame.display.set_caption("Munchkin-like RPG Adventure")
         self.clock = pygame.time.Clock()
         self.is_running = True
@@ -45,7 +46,6 @@ class Game:
         self.current_screen = self.screens[self.state]
         self.message = ""
         self.last_fight_rewards = {}
-        self.inventory_screen = None
 
     def _validate_assets(self):
         """
@@ -83,7 +83,8 @@ class Game:
             'load_game': LoadGameScreen(self, self.asset_manager),
             'game_world': GameWorldScreen(self, self.asset_manager),
             'fight': FightScreen(self, self.asset_manager),
-            'post_fight_summary': PostFightSummaryScreen(self, self.asset_manager)
+            'post_fight_summary': PostFightSummaryScreen(self, self.asset_manager),
+            'inventory': InventoryScreen(self, self.asset_manager)
         }
 
     def run(self):
@@ -101,12 +102,7 @@ class Game:
             if event.type == pygame.QUIT:
                 self.quit_game()
             if self.state == 'game_world' and event.type == pygame.KEYDOWN and event.key == pygame.K_i:
-                from inventory_screen import InventoryScreen
-                self.inventory_screen = InventoryScreen(self, self.player)
-                self.state = 'inventory'
-                return
-            if self.state == 'inventory' and self.inventory_screen:
-                self.inventory_screen.handle_event(event)
+                self.change_state('inventory')
                 return
         self.current_screen.handle_events(events)
 
@@ -117,24 +113,20 @@ class Game:
 
     def draw(self):
         """Draws the current screen and any global elements."""
-        if self.state == 'inventory' and self.inventory_screen:
-            self.inventory_screen.draw(self.screen)
-        else:
-            self.current_screen.draw(self.screen)
+        self.current_screen.draw(self.screen)
         if self.message:
             # Używamy bezpośrednio asset_manager.get_font, nie potrzebujemy już FONT_NAME
             self.draw_text(self.message, 'medium', RED, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50)
         pygame.display.flip()
-
-    def return_to_game_world(self):
-        self.state = 'game_world'
-        self.inventory_screen = None
 
     def change_state(self, new_state):
         """Changes the current game state to a new screen."""
         if new_state in self.screens:
             self.state = new_state
             self.current_screen = self.screens[self.state]
+            # Pass player to the inventory screen
+            if new_state == 'inventory':
+                self.current_screen.player = self.player
             self.message = ""
         else:
             print(f"Error: Unknown state '{new_state}'")

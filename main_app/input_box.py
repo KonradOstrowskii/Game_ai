@@ -7,14 +7,11 @@ class InputBox:
     """
     A class for a user input text box that can use a background image.
     """
-    def __init__(self, x, y, width, height, text='', font=None, background_image=None):
+    def __init__(self, x, y, width, height, text='', font=None, background_image=None, draw_background=True):
         self.rect = pygame.Rect(x, y, width, height)
-        self.color = DARK_GRAY
+        self.color = (255, 255, 255)  # White background
         self.text = text
         
-        # ### ZMIANA 1: Używamy przekazanej czcionki ###
-        # Zamiast tworzyć własną czcionkę, teraz używamy tej, którą dostaliśmy.
-        # Jeśli z jakiegoś powodu czcionka nie zostanie podana, tworzymy domyślną.
         if font is None:
             self.font = pygame.font.Font(None, 32)
         else:
@@ -23,12 +20,10 @@ class InputBox:
         self.txt_surface = self.font.render(text, True, BLACK)
         self.active = False
         self.text_color = BLACK
+        self.draw_background = draw_background  # Control whether to draw background image
 
-        # ### ZMIANA 2: Używamy przekazanej grafiki tła ###
-        # Ta linijka już tu była, ale teraz jest w pełni funkcjonalna
         self.background_image = background_image
-        if self.background_image:
-            # Dopasowujemy rozmiar obrazka do naszego pola, jeśli nie jest już dopasowany
+        if self.background_image and draw_background:
             self.background_image = pygame.transform.scale(self.background_image, (width, height))
 
 
@@ -55,14 +50,19 @@ class InputBox:
 
     def draw(self, screen):
         """
-        Draws the input box on the screen, using a background image if provided.
+        Draws the input box on the screen, with optional background image.
         """
-        if self.background_image:
-            screen.blit(self.background_image, self.rect.topleft)
-            if self.active:
-                pygame.draw.rect(screen, ACTIVE_COLOR, self.rect, 3, border_radius=5)
-        else:
-            pygame.draw.rect(screen, self.color, self.rect, 2)
+        # Draw white background
+        pygame.draw.rect(screen, (255, 255, 255), self.rect)
         
+        # Draw background image if enabled
+        if self.background_image and self.draw_background:
+            screen.blit(self.background_image, self.rect.topleft)
+        
+        # Draw border
+        border_color = ACTIVE_COLOR if self.active else (0, 0, 0)
+        pygame.draw.rect(screen, border_color, self.rect, 3)
+        
+        # Draw text
         text_rect = self.txt_surface.get_rect(center=self.rect.center)
         screen.blit(self.txt_surface, text_rect)

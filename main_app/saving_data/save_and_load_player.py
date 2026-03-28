@@ -128,9 +128,7 @@ def load_player_from_json(filename):
     elif race_name == "Half-Elf":
         from characters.race import HalfElf
         player.race = HalfElf()
-    elif race_name == "Half-Orc":
-        from characters.race import HalfOrc
-        player.race = HalfOrc()
+
     # Skills are tied to race, so restoring race restores skills.
 
     # We recreate the equipment using AVAILABLE_ITEMS

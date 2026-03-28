@@ -33,7 +33,7 @@ BaseCharacter (base_character.py)
 - **Level-up formula**: XP needed = `level * 100`; leveling grants +5 max HP, +2 attack, +1 attribute point
 
 ### Race & Skills System (characters/race.py)
-Each race (Human, Elf, Dwarf, Orc, Halfling, Gnome, Half-Elf, Half-Orc) is a class with:
+Each race (Human, Elf, Dwarf, Orc, Halfling, Gnome, Half-Elf) is a class with:
 - `apply_bonuses()` - modifies player stats (attack_power, hit_points, etc.)
 - `skills` dict - maps skill names (strings) to lambda functions returning bool for dodge/block mechanics
 

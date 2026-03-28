@@ -1,5 +1,5 @@
 # --- IMPORT CHANGE ---
-from .race import Human, Elf, Dwarf, Orc, Halfling, Gnome, HalfElf, HalfOrc
+from .race import Human, Elf, Dwarf, Orc, Halfling, Gnome, HalfElf
 from items_and_equipment.items import NarrowSword, BigStick, LeatherArmor, BasicPotion, HealthPotion, ManaPotion
 
 # Initial configuration for each race
@@ -59,12 +59,5 @@ RACE_CONFIG = {
             HealthPotion()
         ]
     },
-    "half-orc": {
-        "class": HalfOrc,
-        "items": [
-            BigStick(),
-            LeatherArmor(),
-            BasicPotion()
-        ]
-    }
+
 }
